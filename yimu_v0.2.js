@@ -1,6 +1,6 @@
 /*!
  * @name 一木聚合
- * @version 0.2
+ * @version 0.3
  * @description 极致高音质调度策略：母带/全景声/Hi-Res最高音质优先秒播，精准ID直出，5秒智能降级兜底
  * @author 一木
  * @license MIT
