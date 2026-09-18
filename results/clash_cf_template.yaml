@@ -1,8 +1,4 @@
-# 代理集合（占位符，由订阅转换引擎注入）
-proxies: ~
-proxy-providers: ~
-
-# 规则提供者（可以引用 ACL4SSR 规则集）
+# 外部规则集（ACL4SSR）
 rule-providers:
   reject:
     type: http
@@ -10,28 +6,12 @@ rule-providers:
     url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanAD.list"
     path: ./ruleset/reject.yaml
     interval: 86400
-
-  icloud:
-    type: http
-    behavior: domain
-    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Apple.list"
-    path: ./ruleset/icloud.yaml
-    interval: 86400
-
-  apple:
-    type: http
-    behavior: domain
-    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Apple.list"
-    path: ./ruleset/apple.yaml
-    interval: 86400
-
   direct:
     type: http
     behavior: domain
     url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/LocalAreaNetwork.list"
     path: ./ruleset/direct.yaml
     interval: 86400
-
   proxy:
     type: http
     behavior: domain
@@ -39,8 +19,9 @@ rule-providers:
     path: ./ruleset/proxy.yaml
     interval: 86400
 
-# 策略组
+# --- 策略组配置 ---
 proxy-groups:
+  # 主代理组
   - name: 🚀 节点选择
     type: select
     proxies:
@@ -52,72 +33,61 @@ proxy-groups:
       - 🇺🇸 美国节点
       - 🌐 其它地区
       - DIRECT
-    use:
-      - default
 
+  # 自动优选延迟最低的节点
   - name: ♻️ 自动选择
     type: url-test
     url: http://www.gstatic.com/generate_204
     interval: 300
     tolerance: 50
     filter: ".*"
-    use:
-      - default
 
+  # 所有节点做负载均衡
   - name: ⚖️ 负载均衡
     type: load-balance
     url: http://www.gstatic.com/generate_204
     interval: 300
     strategy: consistent-hashing
     filter: ".*"
-    use:
-      - default
 
+  # --- 基于 CF IATA 机场代码的地区分组 ---
   - name: 🇭🇰 香港节点
     type: url-test
     url: http://www.gstatic.com/generate_204
     interval: 300
     tolerance: 50
-    filter: "(?i)港|hk|hongkong|hong kong"
-    use:
-      - default
+    filter: "(?i)HKG|HongKong|Hong Kong|香港"
 
   - name: 🇯🇵 日本节点
     type: url-test
     url: http://www.gstatic.com/generate_204
     interval: 300
     tolerance: 50
-    filter: "(?i)日|jp|japan"
-    use:
-      - default
+    filter: "(?i)NRT|HND|KIX|FUK|Japan|Tokyo|Osaka|日本"
 
   - name: 🇸🇬 新加坡节点
     type: url-test
     url: http://www.gstatic.com/generate_204
     interval: 300
     tolerance: 50
-    filter: "(?i)新|sg|singapore"
-    use:
-      - default
+    filter: "(?i)SIN|Singapore|新加坡"
 
   - name: 🇺🇸 美国节点
     type: url-test
     url: http://www.gstatic.com/generate_204
     interval: 300
     tolerance: 50
-    filter: "(?i)美|us|united states|america"
-    use:
-      - default
+    filter: "(?i)LAX|SJC|SFO|SEA|JFK|ORD|EWR|IAD|MIA|DFW|ATL|LAS|PHX|DEN|America|United States|US|美国"
 
+  # 兜底：既不是香港、日本、新加坡，也不是美国的节点，全扔这里
   - name: 🌐 其它地区
     type: url-test
     url: http://www.gstatic.com/generate_204
     interval: 300
     tolerance: 50
-    filter: "^(?!.*(?:港|hk|hongkong|日|jp|japan|新|sg|singapore|美|us|america)).*"
-    use:
-      - default
+    filter: "^(?!.*(?:HKG|HongKong|香港|NRT|HND|KIX|FUK|Japan|Tokyo|Osaka|日本|SIN|Singapore|新加坡|LAX|SJC|SFO|SEA|JFK|ORD|EWR|IAD|MIA|DFW|ATL|LAS|PHX|DEN|America|United States|US|美国)).*"
 
+  # 直连和拦截组
   - name: 🛑 全球拦截
     type: select
     proxies:
@@ -130,12 +100,10 @@ proxy-groups:
       - DIRECT
       - 🚀 节点选择
 
-# 路由规则
+# --- 分流规则 ---
 rules:
   - RULE-SET,direct,🎯 全球直连
   - RULE-SET,reject,🛑 全球拦截
-  - RULE-SET,icloud,🎯 全球直连
-  - RULE-SET,apple,🎯 全球直连
   - RULE-SET,proxy,🚀 节点选择
   - GEOIP,CN,🎯 全球直连
   - MATCH,🚀 节点选择
