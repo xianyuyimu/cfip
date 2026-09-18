@@ -1,100 +1,100 @@
-162.159.36.75:443#Asia Pacific-44ms
-108.162.196.57:443#Asia Pacific-44ms
-162.159.2.16:443#Asia Pacific-45ms
-162.159.3.25:443#Asia Pacific-45ms
-162.159.11.120:443#Asia Pacific-45ms
-162.159.8.201:443#Asia Pacific-44ms
-104.18.33.68:443#Asia Pacific-45ms
-104.18.43.95:443#Asia Pacific-45ms
-104.18.44.75:443#Asia Pacific-45ms
-104.18.47.75:443#Asia Pacific-45ms
-108.162.192.77:443#Asia Pacific-45ms
-108.162.194.173:443#Asia Pacific-45ms
-162.159.1.131:443#Asia Pacific-45ms
-162.159.17.12:443#Asia Pacific-45ms
-162.159.20.49:443#Asia Pacific-45ms
-162.159.23.43:443#Asia Pacific-45ms
-162.159.24.122:443#Asia Pacific-45ms
-162.159.26.224:443#Asia Pacific-45ms
-162.159.33.62:443#Asia Pacific-45ms
-162.159.58.114:443#Asia Pacific-45ms
-162.159.60.219:443#Asia Pacific-45ms
-162.159.62.21:443#Asia Pacific-45ms
-172.64.145.100:443#Asia Pacific-45ms
-172.64.149.236:443#Asia Pacific-45ms
-172.64.38.116:443#Asia Pacific-45ms
-172.64.41.94:443#Asia Pacific-45ms
-172.64.49.174:443#Asia Pacific-45ms
-173.245.58.42:443#Asia Pacific-45ms
-8.35.211.50:443#Asia Pacific-45ms
-8.39.125.162:443#Asia Pacific-45ms
-104.18.32.250:443#Asia Pacific-46ms
-104.18.34.133:443#Asia Pacific-46ms
-104.18.35.99:443#Asia Pacific-46ms
-104.18.36.53:443#Asia Pacific-46ms
-104.18.37.11:443#Asia Pacific-46ms
-104.18.38.183:443#Asia Pacific-46ms
-104.18.39.173:443#Asia Pacific-46ms
-104.18.40.234:443#Asia Pacific-46ms
-104.18.41.69:443#Asia Pacific-46ms
-104.18.42.54:443#Asia Pacific-46ms
-104.18.45.33:443#Asia Pacific-46ms
-108.162.195.159:443#Asia Pacific-46ms
-162.159.0.243:443#Asia Pacific-46ms
-162.159.10.149:443#Asia Pacific-46ms
-162.159.12.23:443#Asia Pacific-46ms
-162.159.13.119:443#Asia Pacific-46ms
-162.159.14.15:443#Asia Pacific-46ms
-162.159.15.177:443#Asia Pacific-46ms
-162.159.16.161:443#Asia Pacific-46ms
-162.159.18.47:443#Asia Pacific-46ms
-162.159.21.92:443#Asia Pacific-46ms
-162.159.22.239:443#Asia Pacific-46ms
-162.159.25.58:443#Asia Pacific-46ms
-162.159.27.225:443#Asia Pacific-46ms
-162.159.32.36:443#Asia Pacific-46ms
-162.159.34.197:443#Asia Pacific-46ms
-162.159.35.20:443#Asia Pacific-46ms
-162.159.4.56:443#Asia Pacific-46ms
-162.159.40.214:443#Asia Pacific-46ms
-162.159.41.81:443#Asia Pacific-46ms
-162.159.42.67:443#Asia Pacific-46ms
-162.159.43.243:443#Asia Pacific-46ms
-162.159.46.31:443#Asia Pacific-46ms
-162.159.48.156:443#Asia Pacific-46ms
-162.159.49.168:443#Asia Pacific-46ms
-162.159.5.228:443#Asia Pacific-46ms
-162.159.6.125:443#Asia Pacific-46ms
-162.159.61.59:443#Asia Pacific-46ms
-162.159.7.242:443#Asia Pacific-46ms
-162.159.9.150:443#Asia Pacific-46ms
-172.64.144.113:443#Asia Pacific-46ms
-172.64.148.237:443#Asia Pacific-46ms
-172.64.150.13:443#Asia Pacific-46ms
-172.64.151.255:443#Asia Pacific-46ms
-172.64.152.71:443#Asia Pacific-46ms
-172.64.153.241:443#Asia Pacific-46ms
-172.64.155.96:443#Asia Pacific-46ms
-172.64.156.220:443#Asia Pacific-46ms
-172.64.158.176:443#Asia Pacific-46ms
-172.64.159.6:443#Asia Pacific-46ms
-172.64.32.173:443#Asia Pacific-46ms
-172.64.33.21:443#Asia Pacific-46ms
-172.64.34.88:443#Asia Pacific-46ms
-172.64.35.230:443#Asia Pacific-46ms
-172.64.40.44:443#Asia Pacific-46ms
-172.64.42.151:443#Asia Pacific-46ms
-172.64.43.2:443#Asia Pacific-46ms
-172.64.48.88:443#Asia Pacific-46ms
-172.64.50.17:443#Asia Pacific-46ms
-173.245.59.173:443#Asia Pacific-46ms
-198.41.211.150:443#Asia Pacific-46ms
-198.41.222.102:443#Asia Pacific-46ms
-198.41.223.218:443#Asia Pacific-46ms
-104.18.46.111:443#Asia Pacific-47ms
-108.162.193.83:443#Asia Pacific-47ms
-162.159.19.3:443#Asia Pacific-47ms
-172.64.146.95:443#Asia Pacific-47ms
-172.64.147.162:443#Asia Pacific-47ms
-172.64.154.25:443#Asia Pacific-47ms
-172.64.157.81:443#Asia Pacific-47ms
+104.18.37.171:443#Singapore-46ms
+104.18.47.99:443#Singapore-45ms
+162.159.0.98:443#Singapore-45ms
+162.159.4.150:443#Singapore-45ms
+172.64.159.202:443#Singapore-45ms
+104.18.32.103:443#Singapore-45ms
+104.18.33.188:443#Singapore-45ms
+104.18.34.170:443#Singapore-45ms
+104.18.35.35:443#Singapore-45ms
+104.18.39.207:443#Singapore-45ms
+104.18.44.158:443#Singapore-45ms
+108.162.192.59:443#Singapore-45ms
+162.159.16.124:443#Singapore-45ms
+162.159.17.235:443#Singapore-45ms
+162.159.26.112:443#Singapore-45ms
+162.159.35.147:443#Singapore-45ms
+162.159.43.26:443#Singapore-45ms
+162.159.48.55:443#Singapore-45ms
+162.159.58.12:443#Singapore-45ms
+162.159.6.63:443#Singapore-45ms
+162.159.62.58:443#Singapore-45ms
+162.159.7.246:443#Singapore-45ms
+172.64.146.57:443#Singapore-45ms
+172.64.147.237:443#Singapore-45ms
+172.64.149.90:443#Singapore-45ms
+172.64.151.44:443#Singapore-45ms
+172.64.155.195:443#Singapore-45ms
+172.64.157.53:443#Singapore-45ms
+172.64.158.168:443#Singapore-45ms
+172.64.41.160:443#Singapore-45ms
+172.64.49.38:443#Singapore-45ms
+173.245.58.188:443#Singapore-45ms
+198.41.222.186:443#Singapore-45ms
+198.41.223.108:443#Singapore-45ms
+104.18.36.188:443#Singapore-46ms
+104.18.38.36:443#Singapore-46ms
+104.18.40.185:443#Singapore-46ms
+104.18.42.146:443#Singapore-46ms
+104.18.43.121:443#Singapore-46ms
+104.18.45.107:443#Singapore-46ms
+104.18.46.82:443#Singapore-46ms
+108.162.193.223:443#Singapore-46ms
+108.162.194.38:443#Singapore-46ms
+108.162.196.171:443#Singapore-46ms
+162.159.1.9:443#Singapore-46ms
+162.159.10.92:443#Singapore-46ms
+162.159.11.101:443#Singapore-46ms
+162.159.12.233:443#Singapore-46ms
+162.159.14.232:443#Singapore-46ms
+162.159.15.73:443#Singapore-46ms
+162.159.19.173:443#Singapore-46ms
+162.159.2.137:443#Singapore-46ms
+162.159.22.123:443#Singapore-46ms
+162.159.23.26:443#Singapore-46ms
+162.159.24.57:443#Singapore-46ms
+162.159.25.51:443#Singapore-46ms
+162.159.27.178:443#Singapore-46ms
+162.159.3.204:443#Singapore-46ms
+162.159.32.60:443#Singapore-46ms
+162.159.33.108:443#Singapore-46ms
+162.159.34.182:443#Singapore-46ms
+162.159.36.172:443#Singapore-46ms
+162.159.41.84:443#Singapore-46ms
+162.159.42.163:443#Singapore-46ms
+162.159.46.114:443#Singapore-46ms
+162.159.49.240:443#Singapore-46ms
+162.159.60.223:443#Singapore-46ms
+162.159.61.204:443#Singapore-46ms
+172.64.145.41:443#Singapore-46ms
+172.64.148.122:443#Singapore-46ms
+172.64.150.62:443#Singapore-46ms
+172.64.152.0:443#Singapore-46ms
+172.64.154.207:443#Singapore-46ms
+172.64.156.180:443#Singapore-46ms
+172.64.32.152:443#Singapore-46ms
+172.64.33.127:443#Singapore-46ms
+172.64.34.111:443#Singapore-46ms
+172.64.35.239:443#Singapore-46ms
+172.64.38.107:443#Singapore-46ms
+172.64.40.31:443#Singapore-46ms
+172.64.42.158:443#Singapore-46ms
+172.64.43.218:443#Singapore-46ms
+172.64.48.176:443#Singapore-46ms
+172.64.50.115:443#Singapore-46ms
+173.245.59.114:443#Singapore-46ms
+198.41.211.140:443#Singapore-46ms
+8.39.125.67:443#Singapore-46ms
+104.18.41.51:443#Singapore-47ms
+108.162.195.124:443#Singapore-47ms
+162.159.13.92:443#Singapore-47ms
+162.159.18.93:443#Singapore-47ms
+162.159.20.105:443#Singapore-47ms
+162.159.21.194:443#Singapore-47ms
+162.159.40.213:443#Singapore-47ms
+162.159.5.194:443#Singapore-47ms
+162.159.8.37:443#Singapore-47ms
+162.159.9.151:443#Singapore-47ms
+172.64.144.98:443#Singapore-47ms
+172.64.153.160:443#Singapore-47ms
+8.35.211.155:443#Singapore-47ms
