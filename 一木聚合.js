@@ -1,6 +1,6 @@
 /*!
  * @name 一木聚合
- * @version 0.5
+ * @version 0.6
  * @description 后端全面体检重构版：剔除死链/假链后端，接入星海zddyr鉴权、酷狗m站、HW搜索式QQ后端；wy/tx全档真无损，kw真FLAC，kg/mg 128k保底
  * @author 一木 | 修订: LCS
  * @license MIT
@@ -83,7 +83,7 @@ const httpFetch = (url, options = {}) => new Promise((resolve, reject) => {
 
 // ==================== ikun赞助后端（c.wwwweb.top 带Key） ====================
 const IKUN_API = 'https://c.wwwweb.top';
-const IKUN_KEY = 'IKM-M03800001-ZT50XvLToxr9teI0-4N';
+const IKUN_KEY = 'IKM-M03900001-7wHevdGoY0AcaMCf-Df';
 const getIkun = async (source, songId, quality) => {
     const res = await httpFetch(IKUN_API + '/music/url', {
         method: 'POST', timeout: 10000,
@@ -101,7 +101,7 @@ const getIkun = async (source, songId, quality) => {
 
 const md5 = (str) => utils.crypto.md5(str);
 
-// ==================== zddyr 星海鉴权模块 ====================
+// ==================== zddyr 星海鉴权模块（复刻 v2.3.14 客户端令牌） ====================
 let zddyrIp = '';
 let zddyrToken = '';
 let zddyrTokenTs = 0;
@@ -734,8 +734,10 @@ const buildCacheKey = (source, songId, quality) => `${source}_${songId}_${qualit
 const TX_BACKENDS = [
     ...(CHKSZ_CONFIG.apikey && CHKSZ_CONFIG.enableQQ ? [{ name: 'ChKSz QQ', fetch: async (songId, quality, info) => getChkszTx(info?.songmid || songId, quality) }] : []),
     { name: 'HelloWorld QQ', fetch: async (songmid, quality, musicInfo) => {
-        const keyword = encodeURIComponent(musicInfo?.name || musicInfo?.songName || '');
-        if (!keyword) throw new Error('HelloWorld QQ: 缺少歌曲名');
+        const wantName = musicInfo?.name || musicInfo?.songName || '';
+        const wantSinger = musicInfo?.singer || musicInfo?.singerName || '';
+        if (!wantName) throw new Error('HelloWorld QQ: 缺少歌曲名');
+        const keyword = encodeURIComponent(wantName + (wantSinger ? ' ' + wantSinger : ''));
         const qMap = { '128k': '0', '192k': '0', '320k': '1', 'flac': '4', 'flac24bit': '4', 'hires': '4', 'master': '5', 'atmos': '5', 'atmos_plus': '5' };
         const type = qMap[quality] || '1';
         const url = 'https://a.aa.cab/qq.music?msg=' + keyword + '&n=1&type=' + type;
@@ -750,18 +752,17 @@ const TX_BACKENDS = [
         throw new Error('HelloWorld QQ: 无有效链接');
     } },
     { name: '柳云API', fetch: async (songmid, quality, musicInfo) => {
-        const keyword = encodeURIComponent((musicInfo?.name || '') + ' ' + (musicInfo?.singer || ''));
-        if (!keyword) throw new Error('柳云API: 缺少歌曲名');
-        const url = 'https://a.aa.cab/qq.music?msg=' + keyword + '&n=' + (2 + (songmid.charCodeAt(songmid.length - 1) % 7)) + '&type=' + ({ '128k': '0', '192k': '0', '320k': '1', 'flac': '4', 'flac24bit': '4', 'hires': '4', 'master': '5', 'atmos': '5', 'atmos_plus': '5' }[quality] || '1');
+        const wantName = musicInfo?.name || '';
+        const wantSinger = musicInfo?.singer || '';
+        if (!wantName) throw new Error('柳云API: 缺少歌曲名');
+        const url = 'https://a.aa.cab/qq.music?msg=' + encodeURIComponent(wantName + (wantSinger ? ' ' + wantSinger : '')) + '&n=1&type=' + ({ '128k': '0', '192k': '0', '320k': '1', 'flac': '4', 'flac24bit': '4', 'hires': '4', 'master': '5', 'atmos': '5', 'atmos_plus': '5' }[quality] || '1');
         const res = await httpFetch(url, { method: 'GET', timeout: 6000 });
         const d = res.body;
         const u = d && (d.data?.music || d.playUrl || d.url || d.data?.url);
         if (typeof u === 'string' && u.startsWith('http')) return u;
         throw new Error('柳云API: 无有效链接');
     } },
-    { name: 'HW备用位', fetch: async (songmid, quality) => {
-        throw new Error('HW备用位: 保留槽位');
-    } },
+
 ];
 
 // -------- 网易云音乐后端 --------
@@ -836,9 +837,12 @@ const KW_BACKENDS = [
         const singer = musicInfo?.singer || '';
         const keyword = name + (singer ? ' ' + singer : '');
         if (!keyword) throw new Error('溯音酷我: 缺少歌曲名');
+        const wantName = name, wantSinger = singer;
         const res = await httpFetch('https://oiapi.net/api/Kuwo?msg=' + encodeURIComponent(keyword) + '&n=1&br=' + br, { method: 'GET', timeout: 6000 });
         const d = res.body;
+        const dd = d && (Array.isArray(d.data) ? d.data[0] : d.data);
         if (d && d.data && d.data.url) return d.data.url;
+        if (dd && dd.url) return dd.url;
         if (d && d.url) return d.url;
         throw new Error('溯音酷我: 无数据');
     } },
@@ -1020,7 +1024,7 @@ send(EVENT_NAMES.inited, {
     sources: sources,
 });
 
-console.log("[一木聚合] v0.5 已加载");
+console.log("[一木聚合] v0.9 已加载");
 console.log('[一木聚合] 平台: ' + MUSIC_SOURCE.join(', '));
 console.log('[一木聚合] 缓存 TTL: ' + (CACHE_TTL_MS / 3600000) + ' 小时');
 if (CHKSZ_CONFIG.apikey) console.log('[一木聚合] ChKSz API 已启用');
