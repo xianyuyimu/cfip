@@ -1,116 +1,92 @@
-port: 7890
-socks-port: 7891
-allow-lan: true
-mode: rule
-log-level: info
-ipv6: false
+[custom]
+;不要随意改变关键字，否则会导致出错
+;cfnew 专属精简版 v3 —— 基于 ACL4SSR_Online_Mini_MultiMode
+;
+;配套节点源：https://github.com/xianyuyimu/cfip/blob/main/results/ip.txt
+;节点名格式：ip:port#HB-JP（家宽）或 ip:port#SG（普通）
+;
+;v3 变更（对齐原版 _worker.js 家宽设计哲学）：
+;  1. 家宽组从 url-test 改为 fallback：家宽是 OpenVPN 隧道节点，每次 url-test
+;     都是完整握手，5 分钟一轮会把住宅上行打爆/触发风控。原版用 fallback+1800s+lazy
+;     ——当前节点能用就不动，挂了才切，不用不测
+;  2. 家宽组测速间隔 1800s（30 分钟）对齐原版
+;  3. 服务端 ip.txt 已完成「TCP 可达 + 延迟门槛」筛选，客户端组只做保活切换
+;
+;正则说明：全部使用 Go regexp(RE2) 兼容语法，Clash/Mihomo/Stash 内核通吃
 
-# 外部规则集（ACL4SSR）
-rule-providers:
-  reject:
-    type: http
-    behavior: domain
-    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanAD.list"
-    path: ./ruleset/reject.yaml
-    interval: 86400
-  direct:
-    type: http
-    behavior: domain
-    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/LocalAreaNetwork.list"
-    path: ./ruleset/direct.yaml
-    interval: 86400
-  proxy:
-    type: http
-    behavior: domain
-    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ProxyGFWlist.list"
-    path: ./ruleset/proxy.yaml
-    interval: 86400
+;去广告：支持
+;自动测速：支持（普通 IP url-test / 家宽 fallback 保活切换）
+;故障转移：支持
+;负载均衡：支持
+;家宽/普通分流：支持（HB- 前缀正则）
+;国内外 DNS 分流：支持
 
-# --- 策略组配置 ---
-proxy-groups:
-  # 主代理组
-  - name: 🚀 节点选择
-    type: select
-    proxies:
-      - ♻️ 自动选择
-      - ⚖️ 负载均衡
-      - 🇭🇰 香港节点
-      - 🇯🇵 日本节点
-      - 🇸🇬 新加坡节点
-      - 🇺🇸 美国节点
-      - 🌐 其它地区
-      - DIRECT
+;══════════ DNS（国内外双通道）══════════
+dns_servers=国内DNS,https://223.5.5.5/dns-query,skip-cert-verify=false
+dns_servers=国内DNS2,https://doh.pub/dns-query,skip-cert-verify=false
+dns_servers=国外DNS,https://1.1.1.1/dns-query,skip-cert-verify=true
+dns_servers=国外DNS2,https://8.8.8.8/dns-query,skip-cert-verify=true
+enable_dns=true
+ipv6=false
+enhanced-mode=fake-ip
+fake-ip-range=198.18.0.1/16
+fake-ip-filter=*.lan,*.local,*.msftconnecttest.com,*.msftncsi.com,localhost.ptlogin2.qq.com,+.srv.nintendo.net,+.stun.playstation.net,+.xboxlive.com,dns.msftncsi.com
+dns_nameserver=国内DNS,国内DNS2
+dns_fallback=国外DNS,国外DNS2
+dns_default_ns=国内DNS,国内DNS2
 
-  # 自动优选延迟最低的节点
-  - name: ♻️ 自动选择
-    type: url-test
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    tolerance: 50
-    filter: ".*"
+;══════════ 分流规则（Mini 精简集）══════════
+ruleset=🎯 全球直连,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/LocalAreaNetwork.list
+ruleset=🎯 全球直连,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/UnBan.list
+ruleset=🛑 全球拦截,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanAD.list
+ruleset=🛑 全球拦截,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanProgramAD.list
+ruleset=🎯 全球直连,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/GoogleCN.list
+ruleset=🎯 全球直连,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/SteamCN.list
+ruleset=📲 电报信息,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Telegram.list
+ruleset=🎥 国外媒体,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ProxyMedia.list
+ruleset=🚀 节点选择,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ProxyLite.list
+ruleset=🎯 全球直连,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaDomain.list
+ruleset=🎯 全球直连,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaCompanyIp.list
+;ruleset=🎯 全球直连,[]GEOIP,LAN
+ruleset=🎯 全球直连,[]GEOIP,CN
+ruleset=🐟 漏网之鱼,[]FINAL
 
-  # 所有节点做负载均衡
-  - name: ⚖️ 负载均衡
-    type: load-balance
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    strategy: consistent-hashing
-    filter: ".*"
+;══════════ 策略组 ═══════════
+;主入口：家宽优先（住宅IP防风控）→ 三网智能 → 地区 → 自动/转移/负载
+custom_proxy_group=🚀 节点选择`select`[]🏠 家宽优选`[]🔬 三网智能`[]🎯 地区优选`[]♻️ 自动测速`[]🔯 故障转移`[]🔮 负载均衡`[]DIRECT`.*
 
-  # --- 基于 CF IATA 机场代码的地区分组 ---
-  - name: 🇭🇰 香港节点
-    type: url-test
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    tolerance: 50
-    filter: "(?i)HKG|HongKong|Hong Kong|香港"
+;家宽组 v3：fallback + 1800s + lazy（对齐原版设计）
+;家宽是 OpenVPN 隧道节点，fallback 只在当前节点失联时切换，lazy 不用不测
+;服务端 ip.txt 已筛过 TCP 可达 + 延迟门槛，客户端无需高频探测
+custom_proxy_group=🏠 家宽优选`fallback`.*HB-.*`http://www.gstatic.com/generate_204`1800
+;家宽手动切换（想钉死某个家宽时用）
+custom_proxy_group=🏠 家宽手选`select`.*HB-.*`[]🏠 家宽优选
 
-  - name: 🇯🇵 日本节点
-    type: url-test
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    tolerance: 50
-    filter: "(?i)NRT|HND|KIX|FUK|Japan|Tokyo|Osaka|日本"
+;三网智能：普通 IP 池 url-test（HTTPS 端点 url-test 开销小，5 分钟一轮合理）
+custom_proxy_group=🔬 三网智能`url-test`.*`http://www.gstatic.com/generate_204`300,,50
 
-  - name: 🇸🇬 新加坡节点
-    type: url-test
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    tolerance: 50
-    filter: "(?i)SIN|Singapore|新加坡"
+;按地区（家宽+普通同地区归一组）
+custom_proxy_group=🇯🇵 日本`url-test`.*#(HB-)?JP$`http://www.gstatic.com/generate_204`300,,50
+custom_proxy_group=🇰🇷 韩国`url-test`.*#(HB-)?KR$`http://www.gstatic.com/generate_204`300,,50
+custom_proxy_group=🇸🇬 新加坡`url-test`.*#(HB-)?SG$`http://www.gstatic.com/generate_204`300,,50
+custom_proxy_group=🇺🇸 美国`url-test`.*#(HB-)?US$`http://www.gstatic.com/generate_204`300,,50
+custom_proxy_group=🇭🇰 香港`url-test`.*#(HB-)?HK$`http://www.gstatic.com/generate_204`300,,50
+custom_proxy_group=🇨🇳 台湾`url-test`.*#(HB-)?TW$`http://www.gstatic.com/generate_204`300,,50
+custom_proxy_group=🇩🇪 德国`url-test`.*#(HB-)?DE$`http://www.gstatic.com/generate_204`300,,50
+custom_proxy_group=🇬🇧 英国`url-test`.*#(HB-)?GB$`http://www.gstatic.com/generate_204`300,,50
 
-  - name: 🇺🇸 美国节点
-    type: url-test
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    tolerance: 50
-    filter: "(?i)LAX|SJC|SFO|SEA|JFK|ORD|EWR|IAD|MIA|DFW|ATL|LAS|PHX|DEN|America|United States|US|美国"
+custom_proxy_group=🎯 地区优选`select`[]🏠 家宽优选`[]🇯🇵 日本`[]🇰🇷 韩国`[]🇸🇬 新加坡`[]🇺🇸 美国`[]🇭🇰 香港`[]🇨🇳 台湾`[]🇩🇪 德国`[]🇬🇧 英国
 
-  # 兜底：既不是香港、日本、新加坡，也不是美国的节点，全扔这里
-  - name: 🌐 其它地区
-    type: url-test
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    tolerance: 50
-    filter: "^(?!.*(?:HKG|HongKong|香港|NRT|HND|KIX|FUK|Japan|Tokyo|Osaka|日本|SIN|Singapore|新加坡|LAX|SJC|SFO|SEA|JFK|ORD|EWR|IAD|MIA|DFW|ATL|LAS|PHX|DEN|America|United States|US|美国)).*"
+;普通 IP 三件套（url-test/fallback/load-balance，对普通 HTTPS 端点高频测速无压力）
+custom_proxy_group=♻️ 自动测速`url-test`.*`http://www.gstatic.com/generate_204`300,,50
+custom_proxy_group=🔯 故障转移`fallback`.*`http://www.gstatic.com/generate_204`180
+custom_proxy_group=🔮 负载均衡`load-balance`.*`http://www.gstatic.com/generate_204`180
 
-  # 直连和拦截组
-  - name: 🛑 全球拦截
-    type: select
-    proxies:
-      - REJECT
-      - DIRECT
+custom_proxy_group=🎥 国外媒体`select`[]🚀 节点选择`[]🏠 家宽优选`[]🔬 三网智能`[]♻️ 自动测速`[]🎯 地区优选
+custom_proxy_group=📲 电报信息`select`[]🚀 节点选择`[]🏠 家宽优选`[]♻️ 自动测速`[]🔮 负载均衡
+custom_proxy_group=🎯 全球直连`select`[]DIRECT`[]🚀 节点选择
+custom_proxy_group=🛑 全球拦截`select`[]REJECT`[]DIRECT
+custom_proxy_group=🐟 漏网之鱼`select`[]🚀 节点选择`[]🏠 家宽优选`[]🎯 全球直连`[]♻️ 自动测速`[]🔯 故障转移
 
-  - name: 🎯 全球直连
-    type: select
-    proxies:
-      - DIRECT
-      - 🚀 节点选择
-
-# --- 分流规则 ---
-rules:
-  - RULE-SET,direct,🎯 全球直连
-  - RULE-SET,reject,🛑 全球拦截
-  - RULE-SET,proxy,🚀 节点选择
-  - GEOIP,CN,🎯 全球直连
-  - MATCH,🚀 节点选择
+enable_rule_generator=true
+overwrite_original_rules=true
