@@ -1,6 +1,6 @@
 /*!
  * @name 一木聚合
- * @version 0.6
+ * @version 0.1
  * @description 后端全面体检重构版：剔除死链/假链后端，接入星海zddyr鉴权、酷狗m站、HW搜索式QQ后端；wy/tx全档真无损，kw真FLAC，kg/mg 128k保底
  * @author 一木 | 修订: LCS
  * @license MIT
@@ -83,7 +83,7 @@ const httpFetch = (url, options = {}) => new Promise((resolve, reject) => {
 
 // ==================== ikun赞助后端（c.wwwweb.top 带Key） ====================
 const IKUN_API = 'https://c.wwwweb.top';
-const IKUN_KEY = 'IKM-M03900001-7wHevdGoY0AcaMCf-Df';
+const IKUN_KEY = 'IKM-Y18100001-z2YY5BBkxsTwKrWB-6i';
 const getIkun = async (source, songId, quality) => {
     const res = await httpFetch(IKUN_API + '/music/url', {
         method: 'POST', timeout: 10000,
@@ -1024,7 +1024,7 @@ send(EVENT_NAMES.inited, {
     sources: sources,
 });
 
-console.log("[一木聚合] v0.9 已加载");
+console.log("[一木聚合]  已加载");
 console.log('[一木聚合] 平台: ' + MUSIC_SOURCE.join(', '));
 console.log('[一木聚合] 缓存 TTL: ' + (CACHE_TTL_MS / 3600000) + ' 小时');
 if (CHKSZ_CONFIG.apikey) console.log('[一木聚合] ChKSz API 已启用');
