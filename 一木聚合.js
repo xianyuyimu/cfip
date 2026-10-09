@@ -7,8 +7,14 @@
  */
 const { EVENT_NAMES, request, on, send, utils, env, version, currentScriptInfo } = globalThis.lx;
 
-// ==================== 用户配置区域 ====================
+// ==================== 配置区域 ====================
 const USER_CONFIG = {
+    github: {
+        repo: 'xianyuyimu/cfip',
+        branch: 'main',
+        scriptPath: '一木聚合.js',
+        ghProxy: 'https://mirror.mikus.ink/',
+    },
     kwDecrypt: {
         url: '',
         allowEncryptedLossless: false,
@@ -994,6 +1000,46 @@ const handleGetMusicUrl = async (source, musicInfo, userQuality) => {
     throw new Error(`所有音质尝试失败（从 ${userQuality} 降至最低）`);
 };
 
+
+// ==================== 自动更新（单文件自校验） ====================
+const GH = USER_CONFIG.github;
+const SCRIPT_VERSION = '0.1';
+
+const ghRaw = (path) => {
+    if (!GH.repo || !GH.repo.includes('/')) return null;
+    const base = `https://github.com/${GH.repo}/raw/refs/heads/${GH.branch || 'main'}/${path}`;
+    return GH.ghProxy ? GH.ghProxy.replace(/\/?$/, '/') + base : base;
+};
+
+const cmpVer = (a, b) => {
+    const pa = String(a).replace(/^v/, '').split('.').map(Number);
+    const pb = String(b).replace(/^v/, '').split('.').map(Number);
+    for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+        const d = (pa[i] || 0) - (pb[i] || 0);
+        if (d) return d;
+    }
+    return 0;
+};
+
+const checkUpdate = async () => {
+    try {
+        const rawUrl = ghRaw(GH.scriptPath || '一木聚合.js');
+        if (!rawUrl) return;
+        const resp = await httpFetch(rawUrl, { method: 'GET', timeout: 10000 });
+        if (!resp || resp.statusCode !== 200) return;
+        const text = typeof resp.body === 'string' ? resp.body : String(resp.body);
+        const m = text.match(/@version\s+v?([0-9.]+)/);
+        if (!m) return;
+        if (cmpVer(m[1], SCRIPT_VERSION) > 0) {
+            send(EVENT_NAMES.updateAlert, {
+                log: '一木聚合发现新版本 v' + m[1] + '（当前 v' + SCRIPT_VERSION + '），请更新',
+                updateUrl: rawUrl,
+            });
+        }
+    } catch (e) { /* 静默 */ }
+};
+setTimeout(checkUpdate, 3000);
+
 // ==================== 事件注册 ====================
 on(EVENT_NAMES.request, ({ action, source, info }) => {
     if (action === 'musicUrl') {
@@ -1024,7 +1070,7 @@ send(EVENT_NAMES.inited, {
     sources: sources,
 });
 
-console.log("[一木聚合]  已加载");
+console.log("[一木聚合] v1.0.0 已加载");
 console.log('[一木聚合] 平台: ' + MUSIC_SOURCE.join(', '));
 console.log('[一木聚合] 缓存 TTL: ' + (CACHE_TTL_MS / 3600000) + ' 小时');
 if (CHKSZ_CONFIG.apikey) console.log('[一木聚合] ChKSz API 已启用');
