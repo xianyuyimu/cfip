@@ -1,6 +1,6 @@
 /*!
  * @name 一木聚合
- * @version 1.0.0
+ * @version 1.0.1
  * @update_url https://mirror.mikus.ink/https://github.com/xianyuyimu/cfip/raw/refs/heads/main/一木聚合.js
  * @description 后端全面体检重构版：剔除死链/假链后端，接入星海zddyr鉴权、酷狗m站、HW搜索式QQ后端；wy/tx全档真无损，kw真FLAC，kg/mg 128k保底
  * @author 一木 | 修订: LCS
@@ -1004,7 +1004,7 @@ const handleGetMusicUrl = async (source, musicInfo, userQuality) => {
 
 // ==================== 自动更新（单文件自校验） ====================
 const GH = USER_CONFIG.github;
-const SCRIPT_VERSION = '1.0.0';
+const SCRIPT_VERSION = '1.0.1';
 
 const ghRaw = (path) => {
     if (!GH.repo || !GH.repo.includes('/')) return null;
