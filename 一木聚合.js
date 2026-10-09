@@ -1,13 +1,14 @@
 /*!
  * @name 一木聚合
- * @version 0.2
+ * @version 1.0.0
+ * @update_url https://mirror.mikus.ink/https://github.com/xianyuyimu/cfip/raw/refs/heads/main/一木聚合.js
  * @description 后端全面体检重构版：剔除死链/假链后端，接入星海zddyr鉴权、酷狗m站、HW搜索式QQ后端；wy/tx全档真无损，kw真FLAC，kg/mg 128k保底
  * @author 一木 | 修订: LCS
  * @license MIT
  */
 const { EVENT_NAMES, request, on, send, utils, env, version, currentScriptInfo } = globalThis.lx;
 
-// ==================== 配置区域 ====================
+// ==================== 用户配置区域 ====================
 const USER_CONFIG = {
     github: {
         repo: 'xianyuyimu/cfip',
@@ -1003,7 +1004,7 @@ const handleGetMusicUrl = async (source, musicInfo, userQuality) => {
 
 // ==================== 自动更新（单文件自校验） ====================
 const GH = USER_CONFIG.github;
-const SCRIPT_VERSION = '0.2';
+const SCRIPT_VERSION = '1.0.0';
 
 const ghRaw = (path) => {
     if (!GH.repo || !GH.repo.includes('/')) return null;
@@ -1070,7 +1071,7 @@ send(EVENT_NAMES.inited, {
     sources: sources,
 });
 
-console.log("[一木聚合] 已加载");
+console.log("[一木聚合]  已加载");
 console.log('[一木聚合] 平台: ' + MUSIC_SOURCE.join(', '));
 console.log('[一木聚合] 缓存 TTL: ' + (CACHE_TTL_MS / 3600000) + ' 小时');
 if (CHKSZ_CONFIG.apikey) console.log('[一木聚合] ChKSz API 已启用');
